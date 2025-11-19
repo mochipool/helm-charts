@@ -10,9 +10,9 @@ keywords:
   - kubernetes
   - forging
   - crds
-home: https://github.com/mochipool/cardano-forge-manager
+home: https://github.com/mochipool/helm-charts
 sources:
-  - https://github.com/mochipool/cardano-forge-manager
+  - https://github.com/mochipool/helm-charts
 maintainers:
   - name: Cardano Forge Manager Team
     email: support@example.com

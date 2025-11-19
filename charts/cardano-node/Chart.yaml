@@ -24,11 +24,12 @@ keywords:
   - high-availability
   - multi-cluster
 
-home: https://github.com/mochipool/cardano-forge-manager
+home: https://github.com/mochipool/helm-charts
 sources:
   - https://github.com/IntersectMBO/cardano-node
   - https://github.com/mochipool/cardano-forge-manager
   - https://github.com/input-output-hk/mithril
+  - https://github.com/mochipool/helm-charts
 
 maintainers:
   - name: Cardano Forge Manager Team
