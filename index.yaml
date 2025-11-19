@@ -3,6 +3,16 @@ entries:
   blockfrost-platform:
   - apiVersion: v2
     appVersion: 10.5.1
+    created: "2025-11-19T12:59:52.69735553Z"
+    description: A Helm chart for the blockfrost-platform Cardano application.
+    digest: 1768d45e18470edfc338f1c5d88b1287bb6b36123c180a66fc4cea15318bba07
+    name: blockfrost-platform
+    type: application
+    urls:
+    - https://github.com/mochipool/helm-charts/releases/download/blockfrost-platform-0.1.1/blockfrost-platform-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 10.5.1
     created: "2025-11-19T08:12:11.863933395Z"
     description: A Helm chart for the blockfrost-platform Cardano application.
     digest: 19b08120dff613914f6a3622194b0783ff45b910ef85e06e97391b4612d30e32
@@ -129,4 +139,4 @@ entries:
     urls:
     - https://github.com/mochipool/helm-charts/releases/download/cardano-node-0.3.0/cardano-node-0.3.0.tgz
     version: 0.3.0
-generated: "2025-11-19T08:12:11.863937844Z"
+generated: "2025-11-19T12:59:52.697364136Z"
