@@ -1,0 +1,115 @@
+---
+# templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "blockfrost-platform.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "blockfrost-platform.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "blockfrost-platform.name" . }}
+    spec:
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+
+      {{- if or .Values.affinity.podAffinity .Values.affinity.nodeAffinity }}
+      affinity:
+        {{- if .Values.affinity.podAffinity }}
+        podAffinity: {{- toYaml .Values.affinity.podAffinity | nindent 10 }}
+        {{- end }}
+        {{- if .Values.affinity.nodeAffinity }}
+        nodeAffinity: {{- toYaml .Values.affinity.nodeAffinity | nindent 10 }}
+        {{- end }}
+      {{- end }}
+
+      # Define volumes for socket mounting
+      volumes:
+        - name: ipc
+          {{- if eq .Values.socket.mountType "pvc" }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.socket.pvcName | quote }}
+          {{- else if eq .Values.socket.mountType "hostPath" }}
+          hostPath:
+            path: {{ .Values.socket.hostPath | quote }}
+            type: File
+          {{- else if eq .Values.socket.mountType "csi" }}
+          csi:
+            driver: {{ .Values.socket.csi.driver | quote }}
+            volumeHandle: {{ .Values.socket.csi.volumeHandle | quote }}
+          {{- else if eq .Values.socket.mountType "nfs" }}
+          nfs:
+            server: {{ .Values.socket.nfs.server | quote }}
+            path: {{ .Values.socket.nfs.path | quote }}
+          {{- end }}
+
+      containers:
+        - name: blockfrost-platform
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+              name: api
+              protocol: {{ .Values.service.protocol }}
+          volumeMounts:
+            - name: ipc
+              mountPath: /ipc
+          env:
+            - name: BLOCKFROST_NETWORK
+              value: {{ .Values.env.BLOCKFROST_NETWORK | quote }}
+            {{- if not .Values.solitary }}
+            - name: BF_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: blockfrost-secrets
+                  key: secret
+            - name: BF_REWARD_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: blockfrost-secrets
+                  key: rewardAddress
+            {{- end }}
+          args:
+            {{- if .Values.solitary }}
+            - "--solitary"
+            {{- end }}
+            - "--server-address"
+            - "0.0.0.0"
+            - "--server-port"
+            - "{{ .Values.service.port }}"
+            - "--log-level"
+            - "{{ .Values.args.logLevel }}"
+            - "--mode"
+            - "{{ .Values.args.mode }}"
+            - "--node-socket-path"
+            - "/ipc/{{ .Values.socket.socketPath }}"
+            {{- if not .Values.solitary }}
+            - "--secret"
+            - "$(BF_SECRET)"
+            - "--reward-address"
+            - "$(BF_REWARD_ADDRESS)"
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.port }}
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+      restartPolicy: Always
+

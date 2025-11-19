@@ -1,0 +1,69 @@
+# values.yaml
+replicaCount: 1
+
+image:
+  repository: ghcr.io/mochipool/blockfrost-platform
+  tag: edge@sha256:36b9d5a4e010b46bc7edad519c2e314b7ddda9346029b4ef2b1c5620c7ea970e
+  pullPolicy: IfNotPresent
+
+service:
+  name: blockfrost-platform
+  port: 3000
+  type: ClusterIP
+  protocol: TCP
+
+# Set up Cardano Node socket mount
+socket:
+  mountType: pvc      # Options: pvc | hostPath | csi | nfs
+  pvcName: socket-dir-cardano-node-0   # PVC name if using PVC mount
+  hostPath: /var/run/cardano-node.socket  # Path on the host if using hostPath
+  csi:
+    driver: example.csi.driver          # CSI driver name if using CSI mount
+    volumeHandle: cardano-socket        # CSI volume handle
+  nfs:
+    server: nfs.example.com             # NFS server address
+    path: /export/cardano-node.socket   # NFS exported path
+  socketPath: node.socket  # Relative path inside /ipc mount
+
+env:
+  BLOCKFROST_NETWORK: mainnet
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+solitary: true
+
+args:
+  logLevel: info
+  mode: full
+
+secrets:
+  enabled: false
+  secret: ""
+  rewardAddress: ""
+
+podSecurityContext:
+  fsGroup: 10001
+  runAsNonRoot: true
+  runAsUser: 10001
+  fsGroupChangePolicy: Always
+
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  seccompProfile:
+    type: "RuntimeDefault"
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  runAsUser: 10001
+
+affinity:
+  podAffinity: {}
+  nodeAffinity: {}

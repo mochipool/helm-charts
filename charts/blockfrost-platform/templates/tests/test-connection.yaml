@@ -1,0 +1,26 @@
+---
+# templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "blockfrost-platform.fullname" . }}-test-connection"
+  labels:
+    app: {{ include "blockfrost-platform.name" . }}
+  annotations:
+    helm.sh/hook: test
+spec:
+  restartPolicy: Never
+  containers:
+    - name: curl-test
+      image: curlimages/curl:7.88.1
+      command:
+        - sh
+        - -c
+        - |
+          echo "Testing service availability..."
+          if curl --fail http://{{ include "blockfrost-platform.fullname" . }}:{{ .Values.service.port }}; then
+            echo "SUCCESS: Service reachable"
+          else
+            echo "FAIL: Service not reachable"
+            exit 1
+          fi
