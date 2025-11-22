@@ -107,6 +107,62 @@ entries:
       artifacthub.io/recommendations: |
         - url: https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack
     apiVersion: v2
+    appVersion: 10.5.3
+    created: "2025-11-22T18:27:37.275211107Z"
+    description: 'Cardano Node Helm Chart with Cluster-Aware Dynamic Block Production  Features:
+      - Multi-cluster coordination with priority-based forge management - Multi-tenant
+      support for running multiple pools in the same cluster - Health-based automatic
+      failover - Optional Mithril Signer and Submit API sidecars - Full observability
+      with Prometheus metrics '
+    digest: 7915fbd0c9cd505696cf0ad5da4580c63dcc226e98957a097dd4fa4f34d2ef86
+    home: https://github.com/mochipool/helm-charts
+    keywords:
+    - cardano
+    - blockchain
+    - block-producer
+    - stake-pool
+    - mithril
+    - forge-manager
+    - high-availability
+    - multi-cluster
+    kubeVersion: '>=1.25.0'
+    maintainers:
+    - email: devops@example.com
+      name: Cardano Forge Manager Team
+    name: cardano-node
+    sources:
+    - https://github.com/IntersectMBO/cardano-node
+    - https://github.com/mochipool/cardano-forge-manager
+    - https://github.com/input-output-hk/mithril
+    - https://github.com/mochipool/helm-charts
+    type: application
+    urls:
+    - https://github.com/mochipool/helm-charts/releases/download/cardano-node-0.3.1/cardano-node-0.3.1.tgz
+    version: 0.3.1
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: added
+          description: Multi-cluster coordination with CardanoForgeCluster CRD
+        - kind: added
+          description: Multi-tenant support for multiple pools per cluster
+        - kind: added
+          description: Health-based automatic failover
+        - kind: changed
+          description: Updated to Forge Manager v2.0 with cluster awareness
+        - kind: changed
+          description: Enhanced RBAC for CRD management
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/license: MIT
+      artifacthub.io/links: |
+        - name: Documentation
+          url: https://github.com/mochipool/cardano-forge-manager/tree/main/docs
+        - name: Support
+          url: https://github.com/mochipool/cardano-forge-manager/issues
+      artifacthub.io/operator: "false"
+      artifacthub.io/prerelease: "false"
+      artifacthub.io/recommendations: |
+        - url: https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack
+    apiVersion: v2
     appVersion: 10.5.1
     created: "2025-11-19T03:36:01.468195601Z"
     description: 'Cardano Node Helm Chart with Cluster-Aware Dynamic Block Production  Features:
@@ -139,4 +195,4 @@ entries:
     urls:
     - https://github.com/mochipool/helm-charts/releases/download/cardano-node-0.3.0/cardano-node-0.3.0.tgz
     version: 0.3.0
-generated: "2025-11-19T12:59:52.697364136Z"
+generated: "2025-11-22T18:27:37.275223149Z"
