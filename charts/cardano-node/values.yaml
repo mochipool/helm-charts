@@ -25,7 +25,7 @@ image:
   cardanoNode:
     repository: ghcr.io/blinklabs-io/cardano-node
     pullPolicy: IfNotPresent
-    tag: "10.5.1"
+    tag: "10.5.3"
   
   forgeManager:
     repository: ghcr.io/mochipool/cardano-forge-manager
