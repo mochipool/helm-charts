@@ -53,6 +53,24 @@ kubectl get crd | grep cardano
 
 ### Step 2: Install Cardano Node
 
+⚠️ **Important**: By default, PVCs have labels which correspond to the chart and cardano-node image version.
+This prevents accidental upgrades which may inadvertently overwrite the ledger data, for example during a
+ledger upgrade event. The onus is on the operator to re-label the following fields on the PVC to the target chart versions:
+
+- `app.kubernetes.io/version`
+- `helm.sh/chart`
+
+If this behaviour is not desired and it is acceptable for such events to occur, then manually create the PVCs, and simply reference
+them in the values file:
+
+```yaml
+persistence:
+  ledger:
+    existingClaim: "NAME_OF_MANUALLY_CREATED_PVC"
+  socket:
+    existingClaim: "NAME_OF_MANUALLY_CREATED_PVC"
+```
+
 ```bash
 # Create a values file with your configuration
 cat > my-pool-values.yaml <<EOF
